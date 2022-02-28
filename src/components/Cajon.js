@@ -9,6 +9,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Link } from "react-router-dom";
+import { Toolbar } from '@material-ui/core';
 
 const drawerWidth = 240;
 
@@ -36,18 +38,18 @@ function ResponsiveDrawer(props) {
 
 
   const drawer = (
-    <div>
-      <div className={classes.toolbar} />
+    <>
+      <Toolbar />
       <Divider />
       <List>
         {props.icons.map((icon, index) => (
-          <ListItem button key={index}>
+          <ListItem button key={index} component={Link} to={icon.to}>
             <ListItemIcon>{icon.listItemIcon}</ListItemIcon>
             <ListItemText primary={icon.text} />
           </ListItem>
         ))}
       </List>
-    </div>
+    </>
   );
 
   const container = window !== undefined ? () => window().document.body : undefined;

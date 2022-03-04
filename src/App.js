@@ -42,24 +42,7 @@ function App() {
     { listItemIcon: <DescriptionIcon />, text: "Series Escritas", to: "/series-escritas" }
   ]
 
-  const [series, setSeries] = React.useState([])
-
-  React.useEffect(() => {
-    fetch("http://localhost:1337/api/series", {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(serie => serie.json())
-      .then(serie => setSeries(serie.data))
-
-    return () => {
-      setSeries([])
-    }
-  }, [])
-
-  console.log(series)
+  
 
 
   return (
@@ -75,7 +58,7 @@ function App() {
       <div className={classes.toolbar} />
       <div className={classes.content}>
         <Routes>
-          <Route path="/series-escritas" element={<SeriesEscritas series={series} />} />
+          <Route path="/series-escritas" element={<SeriesEscritas  />} />
 
         </Routes>
       </div>

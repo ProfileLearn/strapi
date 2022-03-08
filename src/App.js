@@ -7,10 +7,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
+  useParams
 } from "react-router-dom";
 import { SeriesEscritas } from './pages/SeriesEscritas';
-
+import { Serie } from './pages/Serie';
+import { useNavigate } from 'react-router';
+import { Router } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -33,16 +36,40 @@ function App() {
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const [serie, setSerie] = React.useState()
+
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
   const icons = [
     { listItemIcon: <SpeakerIcon />, text: "Audio Libros", to: "/audiolibros" },
-    { listItemIcon: <DescriptionIcon />, text: "Series Escritas", to: "/series-escritas" }
+    { listItemIcon: <DescriptionIcon />, text: "Series Escritas", to: "/series" }
   ]
 
-  
+  const [series, setSeries] = React.useState([])
+
+  const params = useParams();
+  console.log(params)
+
+
+  React.useEffect(() => {
+    fetch("http://localhost:1337/api/series", {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+      .then(serie => serie.json())
+      .then(serie => setSeries(serie.data))
+    
+    return () => {
+
+    }
+  }, [])
+
 
 
   return (
@@ -58,8 +85,7 @@ function App() {
       <div className={classes.toolbar} />
       <div className={classes.content}>
         <Routes>
-          <Route path="/series-escritas" element={<SeriesEscritas  />} />
-
+          <Route path="/series" element={<SeriesEscritas series={series} />} />
         </Routes>
       </div>
     </BrowserRouter>

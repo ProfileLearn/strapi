@@ -2,11 +2,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import MediaCard from '../components/MediaCard';
 import img from "../media/img.png"
-import { Routes, Route, useNavigate, Navigate } from 'react-router';
-import { Serie } from './Serie';
-
-
-
+import { Route, Routes } from 'react-router';
+import { Serie } from './Serie'
+import { useParams, useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,56 +14,61 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
     justifyContent: "space-evenly",
     alignItems: "flex-start"
+
   }
 }));
 
+
 export const SeriesEscritas = (props) => {
-  const [series, setSeries] = React.useState([])
-  const [capitulo, setCapitulo] = React.useState()
+  const [serie, setSerie] = React.useState()
 
 
-  React.useEffect(() => {
-    fetch("http://localhost:1337/api/series", {
+  const classes = useStyles();
+
+  const params = useParams();
+  console.log(params)
+
+  const navigate = useNavigate();
+
+
+  const handleSeeMoreClick = () => {
+
+
+    fetch(`http://localhost:1337/api/series/1`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     })
+      .then(s => s.json())
+      .then(s => {
+        console.log(s)
+        setSerie(s)
+      })
+      // .then(s => navigate("/1"))
 
-      .then(serie => serie.json())
-      .then(serie => setSeries(serie.data))
+  }
 
-    return () => {
-      setSeries([])
-    }
-  }, [capitulo])
 
-  const classes = useStyles();
+
 
   const mediacard =
-    series.map(serie => {
+    props.series.map(s => {
       return (<MediaCard
-        key={serie.id}
+        key={s.id}
         image={img}
-        title={serie.attributes.titulo}
-        contentTitle={serie.attributes.sinopsis}
-        contentText={serie.attributes.contenido}
-        shareText="Compartir"
-        seeMoreText="Ver más"
-        seeMoreClick={() => {
-          setCapitulo({ serie })
-          return <Navigate to="serie" />
-        }}
+        title={s.attributes.titulo}
+        contentTitle={s.attributes.sinopsis}
+        contentText={s.attributes.contenido}
+        seeMoreClick={handleSeeMoreClick}
       />)
     }
     )
 
 
-  return <div className={classes.root}>
-    <Routes>
-      <Route path="/serie" element={<Serie contenido={capitulo} />} />
-    </Routes>
-    {mediacard}
 
-  </div>;
+  return (<div className={classes.root}>
+      {!serie ? mediacard : <Serie contenido={serie.data.attributes.contenido} /> }
+
+  </div>)
 };

@@ -19,9 +19,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export const SeriesEscritas = (props) => {
+export const SeriesEscritas = ({series}) => {
   const [serie, setSerie] = React.useState()
-
 
   const classes = useStyles();
 
@@ -30,22 +29,11 @@ export const SeriesEscritas = (props) => {
 
   const navigate = useNavigate();
 
+  
 
   const handleSeeMoreClick = () => {
 
-
-    fetch(`http://localhost:1337/api/series/1`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(s => s.json())
-      .then(s => {
-        console.log(s)
-        setSerie(s)
-      })
-      // .then(s => navigate("/1"))
+    navigate(`${serie.id}`)
 
   }
 
@@ -53,14 +41,11 @@ export const SeriesEscritas = (props) => {
 
 
   const mediacard =
-    props.series.map(s => {
+    series.map((serie,index) => {
       return (<MediaCard
-        key={s.id}
+        key={serie.id}
         image={img}
-        title={s.attributes.titulo}
-        contentTitle={s.attributes.sinopsis}
-        contentText={s.attributes.contenido}
-        seeMoreClick={handleSeeMoreClick}
+        serie={serie}
       />)
     }
     )
@@ -68,7 +53,7 @@ export const SeriesEscritas = (props) => {
 
 
   return (<div className={classes.root}>
-      {!serie ? mediacard : <Serie contenido={serie.data.attributes.contenido} /> }
+    {mediacard}
 
   </div>)
 };

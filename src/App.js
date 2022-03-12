@@ -14,6 +14,7 @@ import { SeriesEscritas } from './pages/SeriesEscritas';
 import { Serie } from './pages/Serie';
 import { useNavigate } from 'react-router';
 import { Router } from 'react-router';
+import { ContactSupportOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -31,27 +32,26 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function App() {
-
+  
   const classes = useStyles();
-
+  
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  const [serie, setSerie] = React.useState()
-
-
+  
+  // const [serie, setSerie] = React.useState()
+  
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
+  
   const icons = [
     { listItemIcon: <SpeakerIcon />, text: "Audio Libros", to: "/audiolibros" },
     { listItemIcon: <DescriptionIcon />, text: "Series Escritas", to: "/series" }
   ]
-
+  
   const [series, setSeries] = React.useState([])
 
-  const params = useParams();
-  console.log(params)
+  const params= useParams();
+  
 
 
   React.useEffect(() => {
@@ -64,11 +64,14 @@ function App() {
 
       .then(serie => serie.json())
       .then(serie => setSeries(serie.data))
+      
     
     return () => {
 
     }
   }, [])
+
+
 
 
 
@@ -85,8 +88,10 @@ function App() {
       <div className={classes.toolbar} />
       <div className={classes.content}>
         <Routes>
+          <Route path="/series/:id" element={<Serie />} />
           <Route path="/series" element={<SeriesEscritas series={series} />} />
         </Routes>
+        <button onClick={()=> console.log(series[0])}>mostrar</button>
       </div>
     </BrowserRouter>
 

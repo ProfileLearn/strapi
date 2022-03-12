@@ -7,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
@@ -18,33 +19,41 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MediaCard(props) {
+export default function MediaCard({serie,image}) {
+  
+  const navigate = useNavigate();
   const classes = useStyles();
+  const {title,contentTitle, id} = serie;
+  
 
   
+  const seeMoreClick = () => {
+    navigate(`${id}`)
+
+  }
 
   return (
     <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={props.image}
+          image={image}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {props.title}
+            {title}
 
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {props.contentTitle}
+            {contentTitle}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary" onClick={props.shareClick}>
+        <Button size="small" color="primary">
           Compartir
         </Button>
-        <Button size="small" color="primary" onClick={props.seeMoreClick}>
+        <Button size="small" color="primary" onClick={seeMoreClick}>
           Ver más
         </Button>
       </CardActions>
